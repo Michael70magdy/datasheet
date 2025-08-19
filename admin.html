@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body data-page="admin">
+  <header class="shell">
+    <div class="nav">
+      <h1 class="brand">League</h1>
+      <nav class="links">
+        <a href="./index.html">Leaderboard</a>
+        <a href="./team.html">Team portal</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="card" id="admin-auth">
+      <h2>Admin sign in</h2>
+      <form id="admin-signin-form" class="form" autocomplete="on">
+        <input type="email" id="admin-email" placeholder="Admin email" required />
+        <input type="password" id="admin-password" placeholder="Password" required />
+        <button type="submit" class="btn">Sign in</button>
+        <p class="error" id="admin-signin-error" hidden></p>
+      </form>
+      <p class="muted">Only admins can adjust points.</p>
+    </section>
+
+    <section class="card" id="admin-panel" hidden>
+      <div class="row">
+        <h2>Adjust points</h2>
+        <button id="admin-signout" class="btn secondary">Sign out</button>
+      </div>
+
+      <form id="points-form" class="form inline">
+        <select id="team-select" required></select>
+        <input type="number" id="delta" step="1" placeholder="+/- points" required />
+        <input type="text" id="comment" maxlength="140" placeholder="Comment (reason)" required />
+        <button type="submit" class="btn">Apply</button>
+      </form>
+      <p class="muted">Use positive for add, negative for remove.</p>
+
+      <h3>Recent activity</h3>
+      <div id="recent-activity" class="list"></div>
+    </section>
+
+    <section class="card warn" id="not-admin" hidden>
+      <h3>Access denied</h3>
+      <p>This account is not an admin. Ask an existing admin to grant access.</p>
+    </section>
+  </main>
+
+  <footer class="shell footer">
+    <span class="muted">Every change leaves a trace — we log all transactions.</span>
+  </footer>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
