@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Team portal</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body data-page="team">
+  <header class="shell">
+    <div class="nav">
+      <h1 class="brand">League</h1>
+      <nav class="links">
+        <a href="./index.html">Leaderboard</a>
+        <a href="./admin.html">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="card" id="team-auth">
+      <h2>Team sign in</h2>
+      <form id="signin-form" class="form" autocomplete="on">
+        <input type="email" id="email" placeholder="Team email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit" class="btn">Sign in</button>
+        <p class="error" id="signin-error" hidden></p>
+      </form>
+      <p class="muted">Each team uses its own credentials provided by the admin.</p>
+    </section>
+
+    <section class="card" id="team-dashboard" hidden>
+      <div class="row">
+        <h2 id="team-name">Team</h2>
+        <button id="signout" class="btn secondary">Sign out</button>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <span class="label">Total points</span>
+          <span id="team-points" class="value">0</span>
+        </div>
+      </div>
+
+      <h3>Activity</h3>
+      <div id="team-activity" class="list"></div>
+    </section>
+  </main>
+
+  <footer class="shell footer">
+    <span class="muted">Stay focused. Small wins add up.</span>
+  </footer>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
