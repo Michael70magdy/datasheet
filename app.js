@@ -22,6 +22,14 @@ async function isAdmin(uid) {
   return snap.exists();
 }
 
+// Find team doc linked to an auth UID
+async function getTeamDocByAuthUid(uid) {
+  if (!uid) return null;
+  const teamQuery = query(collection(db, "teams"), where("authUid", "==", uid), limit(1));
+  const teamSnap = await getDocs(teamQuery);
+  return teamSnap.empty ? null : teamSnap.docs[0];
+}
+
 // Leaderboard
 async function initLeaderboard() {
   const list = $("#leaderboard");
@@ -139,6 +147,9 @@ async function initAdminPanel(user) {
   const gate = $("#admin-auth");
 
   if (!(await isAdmin(user.uid))) {
+    // If a non-admin but linked to a team, route them to the team dashboard
+    const teamDoc = await getTeamDocByAuthUid(user.uid);
+    if (teamDoc) { window.location.href = "./team.html"; return; }
     gate.hidden = true; panel.hidden = true; notAdmin.hidden = false;
     return;
   }
@@ -224,13 +235,21 @@ async function initAdminPanel(user) {
 // Page boot
 if (page === "leaderboard") {
   initLeaderboard();
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) return;
+    if (await isAdmin(user.uid)) { window.location.href = "./admin.html"; return; }
+    const teamDoc = await getTeamDocByAuthUid(user.uid);
+    if (teamDoc) window.location.href = "./team.html";
+  });
 }
 
 if (page === "team") {
   bindTeamAuth();
-  onAuthStateChanged(auth, (user) => {
-    if (user) loadTeamDashboard(user);
-    else { $("#team-dashboard").hidden = true; $("#team-auth").hidden = false; }
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      if (await isAdmin(user.uid)) { window.location.href = "./admin.html"; return; }
+      await loadTeamDashboard(user);
+    } else { $("#team-dashboard").hidden = true; $("#team-auth").hidden = false; }
   });
 }
 
